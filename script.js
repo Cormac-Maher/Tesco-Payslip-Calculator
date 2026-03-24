@@ -1,71 +1,50 @@
-const TAX_CREDIT = 76.93;
-const PAYRATE = 14.44;
-const STANDARD_BAND = 846.16;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payslip Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<h1>Payslip Calculator</h1>
 
-function calculatePayslip(hoursArray) {
-    let weeklyHrs = 0;
-    let premiumHrs = 0;
+<h3>Payslip Date:</h3>
+<input type="date" id="payslipDate">
 
-    const payRate = [PAYRATE, PAYRATE * 1.5,PAYRATE * 2];
+<h2>Hours Worked</h2>
+<div id="hours">
+    <label>Monday: <input type="number" id="mon"></label><br>
+    <label>Tuesday: <input type="number" id="tue"></label><br>
+    <label>Wednesday: <input type="number" id="wed"></label><br>
+    <label>Thursday: <input type="number" id="thu"></label><br>
+    <label>Friday: <input type="number" id="fri"></label><br>
+    <label>Saturday: <input type="number" id="sat"></label><br>
+    <label>Sunday: <input type="number" id="sun"></label><br>
+</div>
 
-    for (let i = 0; i < 7; i++) {
-        let hrsWorked = hoursArray[i];
+<button onclick=" printPayslip()">Calculate</button>
 
-        if (hrsWorked >= 7) {
-            hrsWorked -= 1;
-        } else if (hrsWorked === 6) {
-            hrsWorked -= 0.5;
-        }  
-        if (i === 0) {
-            premiumHrs += hrsWorked;
-        } else {
-            weeklyHrs += hrsWorked;
-        }
-    }
+<h2>Gross Pay</h2>
+<label id="grossPay"></label>
 
-    const totalPay = (weeklyHrs * payRate[0]) + (premiumHrs * payRate[1]);
-    const tax = calculateTax(totalPay);
-    const netPay = totalPay - tax;
+<label id="paySlip"></label>
 
-    return {
-        weeklyHrs,
-        premiumHrs,
-        totalHours: weeklyHrs + premiumHrs,
-        totalPay,
-        tax,
-        netPay,
-        annualNet: netPay * 52
-    };
-}
+<div id="paySlipBox" hidden="False">
+    <p>Total Hours:</p>
+    <p>Weekly Hours:</p>
+    <p>Premium Hours:</p>
+    <br>
+    <p>Gross Pay:</p>
+    <p>Tax Paid:</p>
+    <br>
+    <p>Total Pay:</p>
+</div>
 
+<button onclick="savePayslip()">Save Payslip</button>
 
-function calculateTax(grossPay) {
-    let PAYE_tax = 0;
-    let PRSI_tax = 0;
-    let upperBand;
+<h2>Past Payslips:</h2>
+<ul id="savedPayslipList"></ul>
 
-    const PRSI_credit = 12 * (1 - ((grossPay - 352) / 72));
-
-    if (grossPay > STANDARD_BAND) {
-        upperBand = (grossPay - STANDARD_BAND) * 0.4;           // Calculating PAYE
-        PAYE_tax = (STANDARD_BAND * 0.2) + upperBand;
-    } else {
-        PAYE_tax = grossPay * 0.2;
-    }
-
-    PAYE_tax -= TAX_CREDIT;
-    if (PAYE_tax < 0) PAYE_tax = 0;
-
-    
-    if (grossPay <= 352) {                      // Calculating PRSI
-        PRSI_tax = 0;
-    } else if (grossPay >= 352.01 && grossPay <= 424) {
-        PRSI_tax = (grossPay * 0.042) - PRSI_credit;
-        if (PRSI_tax < 0) PRSI_tax = 0;
-    } else if (grossPay >= 424.01) {
-        PRSI_tax = grossPay * 0.042;
-    }
-
-    return PAYE_tax + PRSI_tax;
-}
+<script src="script.js"></script>
+</body>
+</html>
