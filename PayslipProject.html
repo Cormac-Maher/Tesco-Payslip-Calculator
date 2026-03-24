@@ -22,10 +22,23 @@
     <label>Sunday: <input type="number" id="sun"></label><br>
 </div>
 
-<button onclick="calculatePayslip()">Calculate</button>
+<button onclick=" printPayslip()">Calculate</button>
 
 <h2>Gross Pay</h2>
 <label id="grossPay"></label>
+
+<label id="paySlip"></label>
+
+<div id="paySlipBox" hidden="False">
+    <p>Total Hours:</p>
+    <p>Weekly Hours:</p>
+    <p>Premium Hours:</p>
+    <br>
+    <p>Gross Pay:</p>
+    <p>Tax Paid:</p>
+    <br>
+    <p>Total Pay:</p>
+</div>
 
 <button onclick="savePayslip()">Save Payslip</button>
 
