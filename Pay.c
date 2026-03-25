@@ -8,11 +8,35 @@ float calculateTax(float grossPay);
 
 void main()
 {
-	float hrsWorked, weeklyHrs = 0, premiumHrs = 0, totalPay, holidayHours;
-	float payRate[3] = { PAYRATE, PAYRATE*1.5, PAYRATE*2};
-	char days[7][10] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+	int choice;
 
-	for (int i = 0; i < 7; i++){
+	do
+	{
+		printf("Please 1 to search for a book\n");
+		printf("Please 2 to add for a book\n");
+		printf("Enter 4 to save a database to file\n");
+		printf("Please -1 to exit\n");
+		scanf("%d", &choice);
+
+		if (choice == 1)
+
+		else if (choice == 2)
+
+		else if (choice == 3)
+
+		else if (choice == 4)
+
+
+	} while (choice != -1);
+}
+
+void createPayslip() {
+
+	float hrsWorked, weeklyHrs = 0, premiumHrs = 0, totalPay, holidayHours;
+	float payRate[3] = { PAYRATE, PAYRATE * 1.5, PAYRATE * 2 };
+	char days[7][10] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+
+	for (int i = 0; i < 7; i++) {
 		printf("How many hours did you work on %s? ", days[i]);
 		scanf("%f", &hrsWorked);
 		if (hrsWorked >= 7)
@@ -23,11 +47,11 @@ void main()
 		{
 			hrsWorked -= 0.5;       // 0.5 hour unpaid break for 6 hours worked
 		}
-		if (i == 0) 
+		if (i == 0)
 		{
 			premiumHrs += hrsWorked;			// Sunday hours are paid at a 1.5x rate
 		}
-		else 
+		else
 		{
 			weeklyHrs += hrsWorked;
 		}
@@ -46,9 +70,11 @@ void main()
 
 
 	printf("\n======================================\n");
-
-
 }
+
+
+
+
 
 float calculateTax(float grossPay) {
 	float PAYE_tax = 0, PRSI_tax = 0, upperBand;
