@@ -4,47 +4,68 @@
 #define PAYRATE 14.44
 #define STANDARD_BAND 846.16
 
-float calculateTax(float grossPay);
+typedef struct {
+	float weeklyHrs;
+	float premiumHrs;
+	float grossPay;
+	float totalTax;
+	float totalPay;
+	int day, month, year;
+} PayslipT;
+
+void createPayslip(PayslipT* p);
+void savePayslipToFile(PayslipT p);
 float calculatePAYETax(float grossPay);
 float calculatePRSITax(float grossPay);
-void createPayslip();
-void savePayslipToFile();
 
+//void displayPayslip(PayslipT p);
 
-float hrsWorked, weeklyHrs = 0, premiumHrs = 0, grossPay, holidayHours, totalTax, totalPay;
 float payRate[3] = { PAYRATE, PAYRATE * 1.5, PAYRATE * 2 };
-char days[7][10] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 
 void main()
 {
 	int choice;
+	PayslipT p;
 
 	do
 	{
-		printf("Please 1 to create a new payslip\n");
+		printf("----------------MENU-----------------\n");
+		printf("Enter 1 to create a new payslip\n");
 		printf("Enter 2 to save a payslip to file\n");
-		printf("Please 3 to display all previous payslips\n");
-		printf("Please -1 to exit\n");
+		printf("Enter 3 to display a previous payslip\n");
+		printf("Enter -1 to exit\n");
 		scanf("%d", &choice);
 
 		if (choice == 1) {
-			createPayslip();
+			createPayslip(&p);
 		}
 		else if (choice == 2) {
-			savePayslipToFile();
+			savePayslipToFile(p);
 		}
 		else if (choice == 3) {
-			createPayslip();
+//			displayPayslip(p);
 		}
 
 	} while (choice != -1);
 }
 
-void createPayslip() {
+void createPayslip(PayslipT *p) {
+
+	char days[7][10] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+	float hrsWorked = 0; 
+	p->weeklyHrs = 0;
+	p->premiumHrs = 0;
+
+	printf("Enter payslip date (DD MM YYYY): ");
+	scanf("%d %d %d", &p->day, &p->month, &p->year);
 
 	for (int i = 0; i < 7; i++) {
-		printf("How many hours did you work on %s? ", days[i]);
-		scanf("%f", &hrsWorked);
+
+		do {
+			printf("Hours worked on %s: ", days[i]);
+			scanf("%f", &hrsWorked);
+		} while (hrsWorked < 0 || hrsWorked > 20);
+
 		if (hrsWorked >= 7)
 		{
 			hrsWorked -= 1;          // 1 hour unpaid break for 7 or more hours worked
@@ -55,33 +76,37 @@ void createPayslip() {
 		}
 		if (i == 0)
 		{
-			premiumHrs += hrsWorked;			// Sunday hours are paid at a 1.5x rate
+			p->premiumHrs += hrsWorked;			// Sunday hours are paid at a 1.5x rate
 		}
 		else
 		{
-			weeklyHrs += hrsWorked;
+			p->weeklyHrs += hrsWorked;
 		}
 		hrsWorked = 0;
 	}
 
-	grossPay = (weeklyHrs * payRate[0]) + (premiumHrs * payRate[1]);          // Calculate total pay before tax
-	totalTax = calculatePAYETax(grossPay) + calculatePRSITax(grossPay);												// Calculate total tax
-	totalPay = grossPay - totalTax;																							// Calculate total pay after tax
+	p->grossPay = (p->weeklyHrs * payRate[0]) + (p->premiumHrs * payRate[1]);				// Calculate total pay before tax
+	p->totalTax = calculatePAYETax(p->grossPay) + calculatePRSITax(p->grossPay);
+	p->totalPay = p->grossPay - p->totalTax;                                                  
+;																							// Calculate total pay after tax
 
-	printf("\n==========PROTOTYPE PAYSLIP===========\n");
+	printf("\n======================================\n");
+	printf("            TESCO PAYSLIP            \n");
+	printf("Payslip Date: %02d/%02d/%04d\n", p->day, p->month, p->year);
 	printf("======================================\n");
-	printf("Hours worked: %.2f\n", weeklyHrs + premiumHrs);
-	printf("Pay before tax: %.2f\n", grossPay);
+	printf("Hours worked: %.2f\n", p->weeklyHrs + p->premiumHrs);
+	printf("Standard Pay: %.2f\n", p->weeklyHrs * PAYRATE);
+	printf("Premium Pay: %.2f\n", p->premiumHrs * PAYRATE * 1.5);
+	printf("--------------------------------------\n");
+	printf("Gross Pay: %.2f\n", p->grossPay);
+	printf("PAYE tax: %.2f\n", calculatePAYETax(p->grossPay));
+	printf("PRSI tax: %.2f\n", calculatePRSITax(p->grossPay));
+	printf("--------------------------------------\n");
+	printf("Total pay: %.2f\n", p->totalPay);
+	printf("======================================\n\n");
+}                                                    
 
-	printf("PAYE tax: %.2f\n", calculatePAYETax(grossPay));
-	printf("PRSI tax: %.2f\n", calculatePRSITax(grossPay));
-
-	printf("Total pay: %.2f\n", totalPay);
-
-	printf("======================================\n");
-}
-
-void savePayslipToFile() 
+void savePayslipToFile(PayslipT p) 
 {
 	FILE* file;
 
@@ -92,21 +117,24 @@ void savePayslipToFile()
 		return;
 	}
 
-	fprintf(file, "==========PROTOTYPE PAYSLIP===========\n");
+	fprintf(file, "\n======================================\n");
+	fprintf(file, "            TESCO PAYSLIP            \n");
+	fprintf(file, "Payslip Date: %02d/%02d/%04d\n", p.day, p.month, p.year);
 	fprintf(file, "======================================\n");
-	fprintf(file, "Hours worked: %.2f\n", weeklyHrs + premiumHrs);
-	fprintf(file, "Pay before tax: %.2f\n", grossPay);
-
-	fprintf(file, "PAYE tax: %.2f\n", calculatePAYETax(grossPay));
-	fprintf(file, "PRSI tax: %.2f\n", calculatePRSITax(grossPay));
-
-	fprintf(file, "Total pay: %.2f\n", totalPay);
+	fprintf(file, "Hours worked: %.2f\n", p.weeklyHrs + p.premiumHrs);
+	fprintf(file, "Standard Pay: %.2f\n", p.weeklyHrs * PAYRATE);
+	fprintf(file, "Premium Pay: %.2f\n", p.premiumHrs * PAYRATE * 1.5);
+	fprintf(file, "--------------------------------------\n");
+	fprintf(file, "Gross Pay: %.2f\n", p.grossPay);
+	fprintf(file, "PAYE tax: %.2f\n", calculatePAYETax(p.grossPay));
+	fprintf(file, "PRSI tax: %.2f\n", calculatePRSITax(p.grossPay));
+	fprintf(file, "--------------------------------------\n");
+	fprintf(file, "Total pay: %.2f\n", p.totalPay);
 	fprintf(file, "======================================\n");
-	fclose(file);
-	printf("Payslip saved successfully!\n");
 }
 
-float calculatePAYETax(float grossPay) {
+float calculatePAYETax(float grossPay) 
+{
 	float PAYE_tax = 0, upperBand;
 	if (grossPay > STANDARD_BAND) {
 		upperBand = (grossPay - STANDARD_BAND) * 0.4;
@@ -135,38 +163,4 @@ float calculatePRSITax(float grossPay)
 		PRSI_tax = grossPay * 0.042;
 	}
 	return PRSI_tax;
-}
-
-
-float calculateTax(float grossPay) {
-	float PAYE_tax = 0, PRSI_tax = 0, upperBand;
-	float PRSI_credit = 12 * (1 - ((grossPay - 352) / 72));
-
-	if (grossPay > STANDARD_BAND) {
-		upperBand = (grossPay - STANDARD_BAND) * 0.4;
-		PAYE_tax = (STANDARD_BAND * 0.2) + upperBand;
-	}
-	else
-	{
-		PAYE_tax = grossPay * 0.2;
-	}
-
-	PAYE_tax -= TAX_CREDIT;
-	if (PAYE_tax < 0) PAYE_tax = 0;
-
-	if (grossPay <= 352) {
-		PRSI_tax = 0;
-	}
-	else if (grossPay >= 352.01 && grossPay <= 424) {
-		PRSI_tax = (grossPay * 0.042) - PRSI_credit;
-		if (0 > PRSI_tax) PRSI_tax = 0;
-	}
-	else if (grossPay >= 424.01) {
-		PRSI_tax = grossPay * 0.042;
-	}
-
-	printf("PAYE tax: %.2f\n", PAYE_tax);
-	printf("PRSI tax: %.2f\n", PRSI_tax);
-
-	return PAYE_tax + PRSI_tax;
 }
