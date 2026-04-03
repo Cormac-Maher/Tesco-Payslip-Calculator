@@ -17,8 +17,7 @@ void createPayslip(PayslipT* p);
 void savePayslipToFile(PayslipT p);
 float calculatePAYETax(float grossPay);
 float calculatePRSITax(float grossPay);
-
-//void displayPayslip(PayslipT p);
+void displayPayslip();
 
 float payRate[3] = { PAYRATE, PAYRATE * 1.5, PAYRATE * 2 };
 
@@ -43,7 +42,7 @@ void main()
 			savePayslipToFile(p);
 		}
 		else if (choice == 3) {
-//			displayPayslip(p);
+			displayPayslip();
 		}
 
 	} while (choice != -1);
@@ -92,7 +91,7 @@ void createPayslip(PayslipT *p) {
 
 	printf("\n======================================\n");
 	printf("            TESCO PAYSLIP            \n");
-	printf("Payslip Date: %02d/%02d/%04d\n", p->day, p->month, p->year);
+	printf("             %d/%d/%d\n", p->day, p->month, p->year);
 	printf("======================================\n");
 	printf("Hours worked: %.2f\n", p->weeklyHrs + p->premiumHrs);
 	printf("Standard Pay: %.2f\n", p->weeklyHrs * PAYRATE);
@@ -108,18 +107,17 @@ void createPayslip(PayslipT *p) {
 
 void savePayslipToFile(PayslipT p) 
 {
-	FILE* file;
+	char filename[50];
+	sprintf(filename, "Payslip_%02d-%02d-%04d.txt", p.day, p.month, p.year);
 
-	file = fopen("TescoPayslips.txt", "a");
-
-	if (file == NULL) {
+	FILE* file = fopen(filename, "w");
+	if (!file) {
 		printf("Error opening file!\n");
 		return;
 	}
-
 	fprintf(file, "\n======================================\n");
 	fprintf(file, "            TESCO PAYSLIP            \n");
-	fprintf(file, "Payslip Date: %02d/%02d/%04d\n", p.day, p.month, p.year);
+	fprintf(file, "	      %d/%d/%d\n", p.day, p.month, p.year);
 	fprintf(file, "======================================\n");
 	fprintf(file, "Hours worked: %.2f\n", p.weeklyHrs + p.premiumHrs);
 	fprintf(file, "Standard Pay: %.2f\n", p.weeklyHrs * PAYRATE);
@@ -131,6 +129,9 @@ void savePayslipToFile(PayslipT p)
 	fprintf(file, "--------------------------------------\n");
 	fprintf(file, "Total pay: %.2f\n", p.totalPay);
 	fprintf(file, "======================================\n");
+
+	fclose(file);
+	printf("Payslip saved as %s\n\n", filename);
 }
 
 float calculatePAYETax(float grossPay) 
@@ -163,4 +164,27 @@ float calculatePRSITax(float grossPay)
 		PRSI_tax = grossPay * 0.042;
 	}
 	return PRSI_tax;
+}
+
+void displayPayslip() {
+	char filename[50];
+	int day, month, year;
+
+	printf("Enter payslip date (DD MM YYYY): ");
+	scanf("%d %d %d", &day, &month, &year);
+
+	sprintf(filename, "Payslip_%02d-%02d-%04d.txt", day, month, year);
+
+	FILE* file = fopen(filename, "r");
+	if (!file) {
+		printf("Payslip not found.\n\n");
+		return;
+	}
+
+	char line[200];
+	while (fgets(line, sizeof(line), file)) {
+		printf("%s", line);
+	}
+
+	fclose(file);
 }
