@@ -4,6 +4,7 @@
 #define PAYRATE 14.44
 #define STANDARD_BAND 846.16
 
+// payslip information is held in a struct  
 typedef struct {
 	float weeklyHrs;
 	float premiumHrs;
@@ -13,6 +14,7 @@ typedef struct {
 	int day, month, year;
 } PayslipT;
 
+// function prototypes
 void createPayslip(PayslipT* p);
 void savePayslipToFile(PayslipT p);
 float calculatePAYETax(float grossPay);
@@ -28,6 +30,7 @@ void main()
 
 	do
 	{
+		// Display menu options inside while loop
 		printf("----------------MENU-----------------\n");
 		printf("Enter 1 to create a new payslip\n");
 		printf("Enter 2 to save a payslip to file\n");
@@ -58,6 +61,7 @@ void createPayslip(PayslipT *p) {
 	printf("Enter payslip date (DD MM YYYY): ");
 	scanf("%d %d %d", &p->day, &p->month, &p->year);
 
+	//break hours must be deducted from total hours worked
 	for (int i = 0; i < 7; i++) {
 
 		do {
@@ -89,6 +93,7 @@ void createPayslip(PayslipT *p) {
 	p->totalPay = p->grossPay - p->totalTax;                                                  
 ;																							// Calculate total pay after tax
 
+    // Display payslip details
 	printf("\n======================================\n");
 	printf("            TESCO PAYSLIP            \n");
 	printf("             %d/%d/%d\n", p->day, p->month, p->year);
@@ -107,6 +112,7 @@ void createPayslip(PayslipT *p) {
 
 void savePayslipToFile(PayslipT p) 
 {
+	//file is created based on payslip date
 	char filename[50];
 	sprintf(filename, "Payslip_%02d-%02d-%04d.txt", p.day, p.month, p.year);
 
@@ -137,26 +143,28 @@ void savePayslipToFile(PayslipT p)
 float calculatePAYETax(float grossPay) 
 {
 	float PAYE_tax = 0, upperBand;
+
 	if (grossPay > STANDARD_BAND) {
-		upperBand = (grossPay - STANDARD_BAND) * 0.4;
-		PAYE_tax = (STANDARD_BAND * 0.2) + upperBand;
+		upperBand = (grossPay - STANDARD_BAND) * 0.4;                   // tax the portion above the standard band at 40%
+		PAYE_tax = (STANDARD_BAND * 0.2) + upperBand;                   // Calculate tax for the standard band at 20% and add it to the upper band tax
 	}
 	else
 	{
 		PAYE_tax = grossPay * 0.2;
 	}
 
-	PAYE_tax -= TAX_CREDIT;
-	if (PAYE_tax < 0) PAYE_tax = 0;
+	PAYE_tax -= TAX_CREDIT;                                         // Tax credits are deducted 
+	if (PAYE_tax < 0) PAYE_tax = 0;                                // Ensure that tax does not become negative after applying tax credits
 	return PAYE_tax;
 }
+
 float calculatePRSITax(float grossPay) 
 {
-	float PRSI_tax = 0, PRSI_credit = 12 * (1 - ((grossPay - 352) / 72));
+	float PRSI_tax = 0, PRSI_credit = 12 * (1 - ((grossPay - 352) / 72));      // formula for calculating PRSI tax credit
 	if (grossPay <= 352) {
 		PRSI_tax = 0;
 	}
-	else if (grossPay >= 352.01 && grossPay <= 424) {
+	else if (grossPay >= 352.01 && grossPay <= 424) {                      // PRSI has a taperd 12 euro tax credti depending on the amout earned between 352 and 424 euro
 		PRSI_tax = (grossPay * 0.042) - PRSI_credit;
 		if (0 > PRSI_tax) PRSI_tax = 0;
 	}
@@ -173,7 +181,7 @@ void displayPayslip() {
 	printf("Enter payslip date (DD MM YYYY): ");
 	scanf("%d %d %d", &day, &month, &year);
 
-	sprintf(filename, "Payslip_%02d-%02d-%04d.txt", day, month, year);
+	sprintf(filename, "Payslip_%02d-%02d-%04d.txt", day, month, year);          // Construct the filename to open based on the input date
 
 	FILE* file = fopen(filename, "r");
 	if (!file) {
@@ -182,7 +190,7 @@ void displayPayslip() {
 	}
 
 	char line[200];
-	while (fgets(line, sizeof(line), file)) {
+	while (fgets(line, sizeof(line), file)) {                           // Reads and displays each line of the payslip file
 		printf("%s", line);
 	}
 
