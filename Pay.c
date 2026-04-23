@@ -73,7 +73,7 @@ void createPayslip(PayslipT *p) {
 		{
 			hrsWorked -= 1;          // 1 hour unpaid break for 7 or more hours worked
 		}
-		else if (hrsWorked == 6)
+		else if (hrsWorked >= 6 && hrsWorked  < 7)
 		{
 			hrsWorked -= 0.5;       // 0.5 hour unpaid break for 6 hours worked
 		}
