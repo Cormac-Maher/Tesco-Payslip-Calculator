@@ -1,10 +1,10 @@
-# 🧾 Tesco Payslip Calculator (C)
+# Tesco Payslip Calculator (C)
 
 A console-based payslip calculator written in C. Enter daily hours worked across a 7-day week and the program calculates gross pay, PAYE tax, PRSI tax, and net pay — then lets you save and retrieve payslips as `.txt` files.
 
 ---
 
-## ✨ Features
+## Features
 
 - Calculates **gross pay** from standard and Sunday premium hours
 - Automatically deducts **unpaid breaks** based on hours worked per day
@@ -15,7 +15,7 @@ A console-based payslip calculator written in C. Enter daily hours worked across
 
 ---
 
-## 💰 Pay & Tax Rules
+## Pay & Tax Rules
 
 | Rule | Detail |
 |---|---|
@@ -30,7 +30,7 @@ A console-based payslip calculator written in C. Enter daily hours worked across
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Compile
 
@@ -51,7 +51,7 @@ cl payslip.c
 
 ---
 
-## 🖥️ Menu
+## Menu
 
 ```
 ----------------MENU-----------------
@@ -72,7 +72,7 @@ Enter a date to load and print a previously saved payslip file.
 
 ---
 
-## 📄 Sample Output
+## Sample Output
 
 ```
 ======================================
@@ -93,7 +93,7 @@ Total pay: 526.79
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 payslip.c                   # Main source file
@@ -102,7 +102,7 @@ Payslip_DD-MM-YYYY.txt      # Generated payslip files (created at runtime)
 
 ---
 
-## 🛠️ Built With
+## Built With
 
-- **C** (C99 standard)
+- **C**
 - Standard libraries: `stdio.h`
