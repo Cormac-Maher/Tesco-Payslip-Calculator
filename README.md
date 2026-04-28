@@ -1,41 +1,80 @@
-# Tesco Payslip Calculator (C)
-A console-based payslip calculator written in C. Enter daily hours worked across a 7-day week and the program calculates gross pay, PAYE tax, PRSI tax, and net pay — then lets you save and retrieve payslips as .txt files.
+# 🧾 Tesco Payslip Calculator (C)
 
-# Features
+A console-based payslip calculator written in C. Enter daily hours worked across a 7-day week and the program calculates gross pay, PAYE tax, PRSI tax, and net pay — then lets you save and retrieve payslips as `.txt` files.
 
-Calculates gross pay from standard and Sunday premium hours
-Automatically deducts unpaid breaks based on hours worked per day
-Calculates PAYE tax with standard rate band and tax credits
-Calculates PRSI tax with tapered credit for lower earners
-Saves payslips to a date-stamped .txt file
-Retrieves and displays previously saved payslips by date
+---
 
+## ✨ Features
 
-# Pay & Tax Rules
-RuleDetailStandard pay rate€14.44 / hrSunday premium rate€21.66 / hr (1.5×)Break deduction1 hr if ≥ 7 hrs worked; 0.5 hr if 6–7 hrs workedPAYE standard band€846.16/week at 20%; above that at 40%PAYE tax credit€76.93 (deducted after PAYE is calculated)PRSI rate4.2% of gross payPRSI creditTapered €12 credit for earnings between €352–€424PRSI thresholdNo PRSI on earnings ≤ €352
+- Calculates **gross pay** from standard and Sunday premium hours
+- Automatically deducts **unpaid breaks** based on hours worked per day
+- Calculates **PAYE tax** with standard rate band and tax credits
+- Calculates **PRSI tax** with tapered credit for lower earners
+- **Saves payslips** to a date-stamped `.txt` file
+- **Retrieves and displays** previously saved payslips by date
 
-# Getting Started
-Compile
-bashgcc payslip.c -o payslip
+---
+
+## 💰 Pay & Tax Rules
+
+| Rule | Detail |
+|---|---|
+| Standard pay rate | €14.44 / hr |
+| Sunday premium rate | €21.66 / hr (1.5×) |
+| Break deduction | 1 hr if ≥ 7 hrs worked; 0.5 hr if 6–7 hrs worked |
+| PAYE standard band | €846.16/week at 20%; above that at 40% |
+| PAYE tax credit | €76.93 (deducted after PAYE is calculated) |
+| PRSI rate | 4.2% of gross pay |
+| PRSI credit | Tapered €12 credit for earnings between €352–€424 |
+| PRSI threshold | No PRSI on earnings ≤ €352 |
+
+---
+
+## 🚀 Getting Started
+
+### Compile
+
+```bash
+gcc payslip.c -o payslip
+```
+
 Or with MSVC on Windows:
-bashcl payslip.c
-Run
-bash./payslip
+```bash
+cl payslip.c
+```
 
-# Menu
+### Run
+
+```bash
+./payslip
+```
+
+---
+
+## 🖥️ Menu
+
+```
 ----------------MENU-----------------
 Enter 1 to create a new payslip
 Enter 2 to save a payslip to file
 Enter 3 to display a previous payslip
 Enter -1 to exit
-Option 1 — Create Payslip
+```
+
+**Option 1 — Create Payslip**
 Enter the payslip date, then hours worked for each day of the week (Sunday through Saturday). Hours must be between 0 and 20. The payslip is displayed in the console.
-Option 2 — Save to File
-Saves the most recently created payslip to a .txt file named Payslip_DD-MM-YYYY.txt.
-Option 3 — Display Previous Payslip
+
+**Option 2 — Save to File**
+Saves the most recently created payslip to a `.txt` file named `Payslip_DD-MM-YYYY.txt`.
+
+**Option 3 — Display Previous Payslip**
 Enter a date to load and print a previously saved payslip file.
 
-# Sample Output
+---
+
+## 📄 Sample Output
+
+```
 ======================================
             TESCO PAYSLIP
              5/4/2025
@@ -50,12 +89,20 @@ PRSI tax: 9.13
 --------------------------------------
 Total pay: 526.79
 ======================================
+```
 
-# Project Structure
+---
+
+## 📁 Project Structure
+
+```
 payslip.c                   # Main source file
 Payslip_DD-MM-YYYY.txt      # Generated payslip files (created at runtime)
+```
 
-# Built With
+---
 
-C
-Standard libraries: stdio.h
+## 🛠️ Built With
+
+- **C** (C99 standard)
+- Standard libraries: `stdio.h`
